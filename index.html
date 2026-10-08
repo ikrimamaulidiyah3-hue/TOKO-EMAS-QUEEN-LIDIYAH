@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#1E3554" />
+  <meta name="description" content="Queen Lidiyah – Toko emas dan investasi logam mulia." />
+  <title>Queen Lidiyah – Toko Emas</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Figtree:wght@400;500;700;900&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body data-view="katalog">
+
+  <!-- Container confetti -->
+  <div class="confetti-container" id="confetti"></div>
+  <div class="coin-rain" id="coinRain" aria-hidden="true"></div>
+
+  <!-- ============ SVG SPRITE ============ -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <linearGradient id="gold" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#F5DC94" />
+        <stop offset=".5" stop-color="#D8A93B" />
+        <stop offset="1" stop-color="#9A6F18" />
+      </linearGradient>
+      <linearGradient id="silver" x1="0" y1="0" x2="1" y2="1">
+        <stop offset="0" stop-color="#F4F6F8" />
+        <stop offset=".5" stop-color="#B9C0C8" />
+        <stop offset="1" stop-color="#7A828C" />
+      </linearGradient>
+
+      <!-- Gradien batangan emas (permukaan atas lebih cerah, sisi lebih gelap) -->
+      <linearGradient id="barTop" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#FFE9A8" />
+        <stop offset="0.4" stop-color="#F7CE5B" />
+        <stop offset="1" stop-color="#D8A93B" />
+      </linearGradient>
+      <linearGradient id="barFront" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#E0AC2C" />
+        <stop offset="0.6" stop-color="#B98A26" />
+        <stop offset="1" stop-color="#8A6414" />
+      </linearGradient>
+      <linearGradient id="barSide" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="#A87C1F" />
+        <stop offset="1" stop-color="#7A5A12" />
+      </linearGradient>
+
+      <symbol id="qlmark" viewBox="0 0 200 215">
+        <polygon points="62,62 78,34 90,54 100,24 110,54 122,34 138,62" fill="url(#gold)" />
+        <rect x="58" y="67" width="60" height="5" rx="2.5" fill="url(#gold)" />
+        <circle cx="78" cy="30" r="3.5" fill="#fff" />
+        <circle cx="100" cy="19" r="3.5" fill="#fff" />
+        <circle cx="122" cy="30" r="3.5" fill="#fff" />
+        <circle cx="100" cy="138" r="52" fill="none" stroke="url(#gold)" stroke-width="22" />
+        <path d="M86 116h10v34h32v10H86z" fill="url(#gold)" />
+        <polygon points="126,158 146,158 178,196 154,196" fill="url(#gold)" />
+        <path d="M148 158l3 8 8 3-8 3-3 8-3-8-8-3 8-3z" fill="#fff" />
+      </symbol>
+    </defs>
+  </svg>
+
+  <div class="page-loader" id="pageLoader" role="status" aria-live="polite" aria-label="Memuat Queen Lidiyah">
+    <div class="loader-mark" aria-hidden="true">
+      <svg><use href="#qlmark" /></svg>
+    </div>
+    <div class="loader-title">Queen Lidiyah</div>
+    <div class="loader-caption">GOLD · INVESTMENT</div>
+    <div class="loader-track" aria-hidden="true"><span></span></div>
+    <div class="loader-status">Menyiapkan koleksi emas...</div>
+  </div>
+
+  <div class="goodbye-loader" id="goodbyeLoader" role="status" aria-live="polite" aria-hidden="true">
+    <div class="goodbye-content">
+      <div class="goodbye-mascot" aria-hidden="true">
+        <div class="goodbye-face">
+          <span class="goodbye-eyes"><i></i><i></i></span>
+          <span class="goodbye-smile"></span>
+        </div>
+        <span class="goodbye-crown"></span>
+        <span class="goodbye-hand">👋</span>
+      </div>
+      <strong class="goodbye-title">Sampai jumpa!</strong>
+      <span class="goodbye-message">Semoga harimu selalu berkilau.</span>
+      <div class="goodbye-track" aria-hidden="true"><span></span></div>
+      <span class="goodbye-caption">Menyiapkan perpisahan...</span>
+    </div>
+  </div>
+
+  <dialog class="logout-dialog" id="logoutConfirm" aria-labelledby="logoutConfirmTitle" aria-describedby="logoutConfirmMessage">
+    <div class="logout-dialog-content">
+      <h2 id="logoutConfirmTitle">Keluar dari akun?</h2>
+      <p id="logoutConfirmMessage">Kamu bisa masuk kembali kapan saja.</p>
+      <div class="logout-actions">
+        <button class="btn ghost" id="logoutCancel" type="button" autofocus>Tidak</button>
+        <button class="btn" id="logoutConfirmButton" type="button">Ya, keluar</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- ============ SPLASH PEMBUKA ============ -->
+  <div id="splash" role="dialog" aria-label="Pendaftaran pelanggan">
+    <!-- Batangan emas interaktif -->
+    <div class="stage" id="stage" aria-label="Batangan emas interaktif" tabindex="0">
+      <div class="scene">
+        <div class="bar" id="ingot">
+
+          <!-- Sisi atas batangan (permukaan) -->
+          <div class="bar-face bar-top">
+            <span class="bar-text-top">GOLD · 999.9</span>
+          </div>
+
+          <!-- Sisi depan batangan (yang ada berat) -->
+          <div class="bar-face bar-front">
+            <span class="bar-text-front" id="barWeight">1000 g</span>
+          </div>
+
+          <!-- Sisi kanan (ketebalan miring) -->
+          <div class="bar-face bar-right"></div>
+
+          <!-- Sisi kiri (ketebalan miring) -->
+          <div class="bar-face bar-left"></div>
+
+          <!-- Sisi belakang (tidak kelihatan, tapi untuk rotasi) -->
+          <div class="bar-face bar-back">
+            <span class="bar-text-front">1000 g</span>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+    <div class="filters" id="imetal" style="justify-content:center">
+    </div>
+
+    <div class="wm big">Queen Lidiyah</div>
+
+    <form id="fDaftar" class="card form" novalidate>
+      <h2> Halo, boleh kenalan dulu?</h2>
+      <label>Nama lengkap
+        <input id="dNama" autocomplete="name" placeholder="Contoh: Budi Santoso" required />
+      </label>
+      <label>Nomor telepon
+        <input id="dTelp" type="tel" inputmode="tel" placeholder="081234567890" autocomplete="tel" required />
+      </label>
+      <label>Alamat rumah
+        <textarea id="dAlamat" rows="2" autocomplete="street-address" placeholder="Jl. Mawar No. 12, Cirebon" required></textarea>
+      </label>
+      <p class="err" id="dErr" role="alert"></p>
+      <p class="note"> Data cuma disimpan di browser kamu, aman kok!</p>
+      <button class="btn" id="daftarMasuk" type="button">Masuk</button>
+    </form>
+    <button class="btn ghost sm" id="masukTamu" type="button">Masuk sebagai tamu</button>
+  </div>
+
+  <!-- ============ HEADER ============ -->
+  <header class="top">
+    <a class="brand" href="#" data-view="katalog" id="brandLogo" aria-label="Queen Lidiyah beranda">
+      <span class="logo-wrap" id="logoWrap">
+        <span class="logo-ring"></span>
+        <svg class="mk" aria-hidden="true"><use href="#qlmark" /></svg>
+      </span>
+      <span class="wm">Queen Lidiyah</span>
+    </a>
+
+    <button class="hamburger" id="hamburger" type="button" aria-label="Buka menu" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav id="mainNav" aria-label="Menu utama">
+      <button type="button" data-view="katalog" class="on" title="Lihat semua emas">Katalog</button>
+      <button type="button" data-view="digital" title="Kelola emas digital">Emas digital</button>
+      <button type="button" data-view="portofolio" title="Lihat koleksi emas">Emas saya</button>
+      <button type="button" data-view="kalkulator" title="Hitung nilai emas">Kalkulator</button>
+      <button type="button" data-view="toko" title="Informasi toko">Toko</button>
+    </nav>
+
+    <button class="btn ghost sm" id="logout" type="button">Keluar</button>
+  </header>
+
+  <!-- ============ MAIN ============ -->
+  <main id="main">
+
+    <!-- KATALOG -->
+    <section class="hero" data-page="katalog">
+      <div class="hero-brand">
+        <div class="appicon">
+          <svg><use href="#qlmark" /></svg>
+        </div>
+        <div class="hero-copy">
+          <h1 class="wm big">Queen Lidiyah</h1>
+          <p class="sub">Gold Investment</p>
+          <p id="salam" class="note"></p>
+        </div>
+      </div>
+      <div class="ticker" id="ticker" aria-live="polite"></div>
+    </section>
+
+    <section id="v-katalog" class="view" data-page="katalog">
+      <div class="section-header">
+        <p class="section-sub">Harga emas hari ini · <time id="tgl"></time></p>
+      </div>
+      <div class="filters" id="metal" role="group" aria-label="Pilih logam">
+        <button type="button" data-m="Emas" class="on">Emas</button>
+        <button type="button" data-m="Perak">Perak</button>
+      </div>
+
+      <div class="filters" id="filters" role="group" aria-label="Pilih merek"></div>
+
+      <div class="grid" id="katalog"></div>
+    </section>
+
+    <!-- DIGITAL -->
+    <section id="v-digital" class="view" data-page="digital" hidden>
+      <div class="section-header">
+        <h2 class="section-title">Emas digital</h2>
+        <p class="section-sub">Cek saldo, beli, jual — semua bisa dari HP!</p>
+      </div>
+
+      <div class="summary">
+        <div class="summary-card">
+          <small>Saldo emas digital</small>
+          <strong id="dGram">0 g</strong>
+        </div>
+        <div class="summary-card">
+          <small>Nilai jual kembali</small>
+          <strong id="dNilai">Rp 0</strong>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="prog"><i id="bar"></i></div>
+        <p id="dInfo" class="note"></p>
+      </div>
+
+      <div class="card">
+        <h2>Grafik harga emas digital</h2>
+        <div class="filters" id="range">
+          <button type="button" data-d="7">7 hari</button>
+          <button type="button" data-d="30" class="on">30 hari</button>
+          <button type="button" data-d="90">90 hari</button>
+        </div>
+        <div id="chart" class="chart"></div>
+        <p class="out" id="spread"></p>
+      </div>
+
+      <div class="two">
+        <form id="fBeli" class="card form" novalidate>
+          <h2>Beli emas digital</h2>
+          <p class="note">Harga beli <span id="dJual"></span> per gram</p>
+          <label>Nominal (Rp)
+            <input id="bRp" type="number" min="10000" placeholder="100000" required />
+          </label>
+          <p class="err" id="bErr" role="alert"></p>
+          <button class="btn" type="submit">Beli sekarang</button>
+        </form>
+
+        <form id="fJual" class="card form" novalidate>
+          <h2>Jual emas digital</h2>
+          <p class="note">Harga jual kembali <span id="dBeli"></span> per gram</p>
+          <label>Jumlah (gram)
+            <input id="jGr" type="number" min="0.0001" step="0.0001" placeholder="0.1" required />
+          </label>
+          <p class="err" id="jErr2" role="alert"></p>
+          <button class="btn ghost" type="submit">Jual sekarang</button>
+        </form>
+      </div>
+
+      <div class="card" id="cetak" hidden>
+        <h2>Cetak jadi emas fisik</h2>
+        <p class="note">Saldo kamu udah cukup! Pilih ukuran di bawah ya~</p>
+        <div class="opts" id="cetakList"></div>
+      </div>
+    </section>
+
+    <!-- PORTOFOLIO -->
+    <section id="v-portofolio" class="view" data-page="portofolio" hidden>
+      <div class="section-header">
+        <h2 class="section-title">Koleksi emas</h2>
+        <p class="section-sub">Catat terus, biar makin banyak!</p>
+      </div>
+
+      <div class="summary">
+        <div class="summary-card">
+          <small>Total nilai</small>
+          <strong id="total">Rp 0</strong>
+        </div>
+        <div class="summary-card">
+          <small>Total berat fisik</small>
+          <strong id="berat">0 g</strong>
+        </div>
+      </div>
+
+      <form id="fPorto" class="card form" novalidate>
+        <h2>Catat emas fisik baru</h2>
+        <label>Merek<select id="pBrand"></select></label>
+        <label>Berat per batang<select id="pGram"></select></label>
+        <label>Jumlah batang
+          <input id="pQty" type="number" min="1" placeholder="3" required />
+        </label>
+        <p class="err" id="pErr" role="alert"></p>
+        <button class="btn" type="submit">Simpan ke album</button>
+      </form>
+
+      <div class="list" id="daftar"></div>
+    </section>
+
+    <!-- KALKULATOR -->
+    <section id="v-kalkulator" class="view" data-page="kalkulator" hidden>
+      <div class="section-header">
+        <h2 class="section-title">Kalkulator</h2>
+        <p class="section-sub">Hitung dulu, baru beli. Biar gak nyesel~</p>
+      </div>
+
+      <div class="tabs" role="tablist">
+        <button type="button" data-tab="digital" class="on" role="tab">Emas digital</button>
+        <button type="button" data-tab="fisik" role="tab">Emas fisik</button>
+        <button type="button" data-tab="tabung" role="tab">Menabung</button>
+      </div>
+
+      <div class="card form tab" id="t-digital" role="tabpanel">
+        <h2>Kalkulator emas digital</h2>
+        <label>Beli dengan nominal (Rp)
+          <input id="cRp" type="number" min="0" placeholder="500000" />
+        </label>
+        <p class="out" id="cRpOut">Isi nominal untuk lihat gram yang didapat~</p>
+        <label>Punya emas (gram)
+          <input id="cGr" type="number" min="0" step="0.0001" placeholder="1.5" />
+        </label>
+        <p class="out" id="cGrOut">Isi gram untuk lihat nilai jual kembali~</p>
+      </div>
+
+      <form class="card form tab" id="t-fisik" role="tabpanel" hidden novalidate>
+        <h2>Kalkulator emas fisik</h2>
+        <label>Merek<select id="kBrand"></select></label>
+        <label>Berat per batang<select id="kGram"></select></label>
+        <label>Jumlah batang
+          <input id="kQty" type="number" min="1" value="1" required />
+        </label>
+        <p class="err" id="kErr" role="alert"></p>
+        <button class="btn" type="submit">Hitung</button>
+        <div class="out" id="kOut"></div>
+      </form>
+
+      <form class="card form tab" id="t-tabung" role="tabpanel" hidden novalidate>
+        <h2>Simulasi menabung emas</h2>
+        <label>Tabungan per bulan (Rp)
+          <input id="sBulan" type="number" min="10000" placeholder="500000" required />
+        </label>
+        <label>Lama menabung (bulan)
+          <input id="sLama" type="number" min="1" max="360" placeholder="24" required />
+        </label>
+        <label>Perkiraan kenaikan harga per tahun (%)
+          <input id="sGrowth" type="number" min="0" max="50" step="0.5" value="8" />
+        </label>
+        <p class="err" id="sErr" role="alert"></p>
+        <button class="btn" type="submit">Hitung pertumbuhan</button>
+        <div class="out" id="sOut"></div>
+      </form>
+    </section>
+
+    <!-- TOKO -->
+    <section id="v-toko" class="view" data-page="toko" hidden>
+      <div class="section-header">
+        <h2 class="section-title">Informasi toko</h2>
+        <p class="section-sub">Tersedia snack dan minum beserta senyuman gratis.</p>
+      </div>
+
+      <div class="card info">
+        <h2>Queen Lidiyah (QL)</h2>
+        <p>Jl Mayor Dasuki, Jatibarang, Indramayu</p>
+        <p>Senin–Sabtu 08.00–17.00 · Minggu tutup</p>
+        <div class="row">
+          <a class="btn" id="wa" target="_blank" rel="noopener" href="#">Chat WhatsApp</a>
+          <a class="btn ghost" target="_blank" rel="noopener"
+             href="https://www.google.com/maps/search/?api=1&query=Jl+Mayor+Dasuki+Jatibarang+Indramayu">Buka peta</a>
+        </div>
+      </div>
+
+      <form id="fJanji" class="card form" novalidate>
+        <h2>Buat janji datang</h2>
+        <label>Nama
+          <input id="jNama" type="text" autocomplete="name" required />
+        </label>
+        <label>Keperluan
+          <select id="jNeed">
+            <option>Beli emas</option>
+            <option>Jual kembali emas</option>
+            <option>Ambil emas cetakan</option>
+          </select>
+        </label>
+        <label>Tanggal
+          <input id="jTgl" type="date" required />
+        </label>
+        <p class="err" id="jErr" role="alert"></p>
+        <button class="btn" type="submit">Kirim janji</button>
+      </form>
+    </section>
+
+  </main>
+
+
+  <script src="script.js"></script>
+</body>
+</html>
